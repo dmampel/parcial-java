@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER" prefHeight="694.0" prefWidth="288.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.parcial.parcial.controllers.MainViewController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <Label text="Gestión de Autores">
+      <font>
+         <Font size="15.0" />
+      </font>
+    </Label>
+
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="DNI:" />
+        <TextField fx:id="dniTextField" promptText="DNI del autor" />
+    </HBox>
+
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="Nombre:" />
+        <TextField fx:id="nombreTextField" promptText="Nombre del autor" />
+    </HBox>
+
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="Pseudónimo:" />
+        <TextField fx:id="pseudonimoTextField" promptText="Pseudónimo del autor" />
+    </HBox>
+
+    <Button onAction="#agregarAutor" text="Agregar Autor" />
+
+    <Label text="Lista de Autores">
+      <font>
+         <Font size="15.0" />
+      </font>
+    </Label>
+    <ListView fx:id="autoresListView" VBox.vgrow="ALWAYS" />
+</VBox>
