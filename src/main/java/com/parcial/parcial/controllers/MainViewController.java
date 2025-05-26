@@ -54,10 +54,16 @@ public class MainViewController {
             String nombre = nombreTextField.getText();
             String pseudonimo = pseudonimoTextField.getText();
 
-            if(nombre.isEmpty() || pseudonimo.isEmpty() ){
-                System.out.println("Error: Nombre y Pseudonimo no pueden estar vacios.");
+            if (nombre.isEmpty() || pseudonimo.isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR); // 1. Especifica el tipo de alerta
+                alert.setTitle("Error de Validación"); // Opcional: añade un título a la ventana
+                alert.setHeaderText(null); // Opcional: puedes poner un texto de cabecera o dejarlo nulo
+                alert.setContentText("El nombre y el seudónimo no pueden estar vacíos."); // 2. Añade el mensaje principal
+
+                alert.showAndWait(); // 3. Muestra la alerta y espera a que el usuario la cierre
                 return;
             }
+
             Autor autor = new Autor(dni, nombre, pseudonimo);
             autorManager.addAutor(autor);
 
