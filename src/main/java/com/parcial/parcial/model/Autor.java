@@ -1,7 +1,11 @@
 package com.parcial.parcial.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "autores")
 public class Autor extends Persona {
-    public String pseudonimo;
+    private String pseudonimo;
 
     public Autor() {}
 
@@ -9,6 +13,7 @@ public class Autor extends Persona {
         super(dni, nombre);
         this.pseudonimo = pseudonimo;
     }
+
     public String getPseudonimo() {
         return pseudonimo;
     }

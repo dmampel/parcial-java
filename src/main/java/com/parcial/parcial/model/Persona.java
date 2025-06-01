@@ -1,8 +1,12 @@
 package com.parcial.parcial.model;
 
+import jakarta.persistence.*;
+
+@MappedSuperclass
 public class Persona {
-    public int dni;
-    public String nombre;
+    @Id
+    private int dni;
+    private String nombre;
 
     public Persona(){}
 
@@ -26,5 +30,4 @@ public class Persona {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
 }
