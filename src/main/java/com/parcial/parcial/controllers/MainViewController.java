@@ -48,6 +48,20 @@ public class MainViewController {
     }
 
     @FXML
+    private void eliminarAutor(ActionEvent event) {
+        Autor seleccionado = autoresListView.getSelectionModel().getSelectedItem();
+        if (seleccionado != null) {
+            autorManager.removeAutor(seleccionado);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Eliminar Autor");
+            alert.setHeaderText(null);
+            alert.setContentText("Selecciona un autor para eliminar.");
+            alert.showAndWait();
+        }
+    }
+
+    @FXML
     private void agregarAutor(ActionEvent event) {
         try{
             int dni = Integer.parseInt(dniTextField.getText());

@@ -31,7 +31,11 @@
         <TextField fx:id="pseudonimoTextField" promptText="Pseudónimo del autor" />
     </HBox>
 
-    <Button onAction="#agregarAutor" text="Agregar Autor" />
+
+    <HBox alignment="CENTER" spacing="10">
+        <Button onAction="#agregarAutor" text="Agregar Autor" />
+        <Button onAction="#eliminarAutor" text="Eliminar Autor" />
+    </HBox>
 
     <Label text="Lista de Autores">
       <font>

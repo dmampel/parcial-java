@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Explicativa del Proyecto: Gestión de Autores en JavaFX + JPA</title>    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 50%, #1a1a2e 100%);
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+        
+        .slide {
+            min-height: 100vh;
+            padding: 60px 80px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            border-bottom: 2px solid #333;
+        }
+        
+        .slide:nth-child(even) {
+            background: linear-gradient(135deg, #2d2d44 0%, #1e1e2e 50%, #2a2a3e 100%);
+        }
+        
+        h1 {
+            color: #64ffda;
+            font-size: 3.5em;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(100, 255, 218, 0.3);
+            border-bottom: 4px solid #64ffda;
+            padding-bottom: 20px;
+        }
+        
+        h2 {
+            color: #ff6b6b;
+            font-size: 2.8em;
+            font-weight: 600;
+            margin-bottom: 40px;
+            text-align: center;
+            text-shadow: 0 0 15px rgba(255, 107, 107, 0.3);
+            border-left: 8px solid #ff6b6b;
+            padding-left: 25px;
+        }
+        
+        h3 {
+            color: #4ecdc4;
+            font-size: 2.2em;
+            font-weight: 600;
+            margin: 30px 0 20px 0;
+            text-shadow: 0 0 10px rgba(78, 205, 196, 0.3);
+        }
+        
+        h4 {
+            color: #ffa726;
+            font-size: 1.8em;
+            font-weight: 500;
+            margin: 25px 0 15px 0;
+            text-shadow: 0 0 8px rgba(255, 167, 38, 0.3);
+        }
+        
+        p {
+            font-size: 1.3em;
+            margin: 20px 0;
+            text-align: justify;
+            color: #b0b0b0;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #2a2a3e, #1e1e2e);
+            color: #64ffda;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 1.1em;
+            border: 1px solid #444;
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #2a2a3e, #1a1a2e);
+            border: 2px solid #444;
+            border-radius: 12px;
+            padding: 25px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 1.1em;
+            color: #e0e0e0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            margin: 20px 0;
+        }
+        
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: #e0e0e0;
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, rgba(100, 255, 218, 0.1), rgba(100, 255, 218, 0.05));
+            border: 2px solid #64ffda;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+            box-shadow: 0 8px 32px rgba(100, 255, 218, 0.1);
+        }
+        
+        ul {
+            margin: 20px 0;
+            padding-left: 30px;
+            font-size: 1.2em;
+        }
+        
+        li {
+            margin: 15px 0;
+            color: #c0c0c0;
+            position: relative;
+        }
+        
+        li::marker {
+            color: #64ffda;
+            font-size: 1.2em;
+        }
+        
+        li strong {
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+        
+        .conclusion {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 107, 107, 0.05));
+            border: 2px solid #ff6b6b;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 12px 40px rgba(255, 107, 107, 0.1);
+        }
+        
+        .conclusion h2,
+        .conclusion h3 {
+            text-align: left;
+            border: none;
+            padding: 0;
+        }
+        
+        hr {
+            border: none;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #64ffda, transparent);
+            margin: 40px 0;
+        }
+        
+        /* Efectos de animación */
+        .slide {
+            animation: slideIn 0.6s ease-in-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }        /* Responsive Design - Mobile First Approach */
+        
+        /* Tablets (landscape) - 1024px and down */
+        @media (max-width: 1024px) {
+            .slide {
+                padding: 50px 40px;
+            }
+            
+            h1 {
+                font-size: 3em;
+            }
+            
+            h2 {
+                font-size: 2.4em;
+            }
+            
+            h3 {
+                font-size: 2em;
+            }
+            
+            pre {
+                font-size: 1em;
+            }
+        }
+        
+        /* Tablets (portrait) - 768px and down */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px 20px;
+                min-height: auto;
+                justify-content: flex-start;
+            }
+            
+            h1 {
+                font-size: 2.5em;
+                line-height: 1.2;
+                margin-bottom: 25px;
+                text-align: center;
+                border-bottom: 3px solid #64ffda;
+                padding-bottom: 15px;
+            }
+            
+            h2 {
+                font-size: 2em;
+                line-height: 1.3;
+                margin-bottom: 30px;
+                text-align: center;
+                border-left: 6px solid #ff6b6b;
+                padding-left: 20px;
+            }
+            
+            h3 {
+                font-size: 1.6em;
+                line-height: 1.3;
+                margin: 25px 0 20px 0;
+            }
+            
+            h4 {
+                font-size: 1.3em;
+                margin: 20px 0 15px 0;
+            }
+            
+            p {
+                font-size: 1.2em;
+                margin: 18px 0;
+                line-height: 1.6;
+                text-align: left;
+            }
+            
+            ul {
+                font-size: 1.1em;
+                padding-left: 25px;
+                margin: 18px 0;
+            }
+            
+            li {
+                margin: 12px 0;
+                line-height: 1.5;
+            }
+            
+            pre {
+                font-size: 1em;
+                padding: 20px;
+                margin: 20px 0;
+                overflow-x: auto;
+                border-radius: 10px;
+            }
+            
+            code {
+                font-size: 1em;
+                word-break: break-word;
+                padding: 6px 10px;
+            }
+            
+            .highlight {
+                padding: 20px;
+                margin: 20px 0;
+                border-radius: 10px;
+            }
+            
+            .conclusion {
+                padding: 25px;
+                margin: 25px 0;
+                border-radius: 12px;
+            }
+        }
+        
+        /* Mobile phones - 480px and down */
+        @media (max-width: 480px) {
+            .slide {
+                padding: 25px 15px;
+                min-height: auto;
+            }
+            
+            h1 {
+                font-size: 2em;
+                border-bottom: 2px solid #64ffda;
+                padding-bottom: 12px;
+                margin-bottom: 20px;
+                line-height: 1.1;
+            }
+            
+            h2 {
+                font-size: 1.6em;
+                border-left: 4px solid #ff6b6b;
+                padding-left: 15px;
+                margin-bottom: 25px;
+                line-height: 1.2;
+            }
+            
+            h3 {
+                font-size: 1.3em;
+                margin: 20px 0 15px 0;
+                line-height: 1.2;
+            }
+            
+            h4 {
+                font-size: 1.1em;
+                margin: 15px 0 10px 0;
+                line-height: 1.2;
+            }
+            
+            p {
+                font-size: 1.05em;
+                margin: 15px 0;
+                text-align: left;
+                line-height: 1.5;
+            }
+            
+            ul {
+                font-size: 1em;
+                padding-left: 20px;
+                margin: 15px 0;
+            }
+            
+            li {
+                margin: 10px 0;
+                line-height: 1.4;
+                font-size: 0.95em;
+            }
+            
+            pre {
+                font-size: 0.85em;
+                padding: 15px;
+                margin: 15px 0;
+                border-radius: 8px;
+                overflow-x: auto;
+                white-space: pre;
+                word-wrap: normal;
+            }
+            
+            code {
+                font-size: 0.9em;
+                padding: 4px 6px;
+                word-break: break-all;
+            }
+            
+            .highlight {
+                padding: 15px;
+                margin: 15px 0;
+                border-radius: 8px;
+            }
+            
+            .conclusion {
+                padding: 18px;
+                margin: 18px 0;
+                border-radius: 10px;
+            }
+        }
+        
+        /* Small mobile phones - 320px and down */
+        @media (max-width: 320px) {
+            .slide {
+                padding: 20px 12px;
+            }
+            
+            h1 {
+                font-size: 1.7em;
+                line-height: 1.1;
+                margin-bottom: 15px;
+                border-bottom: 2px solid #64ffda;
+                padding-bottom: 10px;
+            }
+            
+            h2 {
+                font-size: 1.4em;
+                line-height: 1.2;
+                margin-bottom: 20px;
+                border-left: 3px solid #ff6b6b;
+                padding-left: 12px;
+            }
+            
+            h3 {
+                font-size: 1.2em;
+                margin: 15px 0 12px 0;
+                line-height: 1.1;
+            }
+            
+            h4 {
+                font-size: 1.05em;
+                margin: 12px 0 8px 0;
+                line-height: 1.1;
+            }
+            
+            p {
+                font-size: 0.95em;
+                margin: 12px 0;
+                line-height: 1.4;
+            }
+            
+            ul {
+                font-size: 0.9em;
+                padding-left: 18px;
+                margin: 12px 0;
+            }
+            
+            li {
+                margin: 8px 0;
+                line-height: 1.3;
+                font-size: 0.9em;
+            }
+            
+            pre {
+                font-size: 0.75em;
+                padding: 12px;
+                margin: 12px 0;
+                border-radius: 6px;
+                overflow-x: auto;
+            }
+            
+            code {
+                font-size: 0.8em;
+                padding: 3px 5px;
+            }
+            
+            .highlight {
+                padding: 12px;
+                margin: 12px 0;
+                border-radius: 6px;
+            }
+            
+            .conclusion {
+                padding: 15px;
+                margin: 15px 0;
+                border-radius: 8px;
+            }
+        }
+        
+        /* Extra responsive improvements */
+        @media (max-width: 480px) {
+            /* Improve touch targets */
+            pre {
+                -webkit-overflow-scrolling: touch;            }
+            
+            /* Better text selection on mobile */
+            pre, code {
+                -webkit-user-select: all;
+                -moz-user-select: all;
+                -ms-user-select: all;
+                user-select: all;
+            }
+            
+            /* Prevent zoom on input focus */
+            pre, code {
+                font-size: 16px !important;
+                transform: scale(0.85);
+                transform-origin: left top;
+            }
+        }
+        
+        /* Additional mobile optimizations */
+        @media (max-width: 768px) {
+            /* Smooth scrolling */
+            html {
+                scroll-behavior: smooth;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            /* Optimize animations for mobile */
+            * {
+                -webkit-tap-highlight-color: transparent;
+            }
+            
+            /* Better spacing for mobile reading */
+            .slide {
+                padding-bottom: 40px;
+            }
+            
+            /* Improve code block mobile experience */
+            pre {
+                max-width: 100%;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+        
+        /* Print styles */
+        @media print {
+            .slide {
+                page-break-after: always;
+                padding: 40px;
+                min-height: auto;
+                box-shadow: none;
+                border: none;
+            }
+            
+            h1, h2 {
+                color: #000 !important;
+                text-shadow: none !important;
+            }
+            
+            pre {
+                background: #f5f5f5 !important;
+                border: 1px solid #ddd !important;
+                color: #333 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="slide">
+<h1>Guía Explicativa del Proyecto: Gestión de Autores en JavaFX + JPA</h1>
+
+<h2>Introducción</h2>
+
+<p>Este proyecto es una aplicación de escritorio desarrollada en Java que permite gestionar una lista de autores, utilizando una interfaz gráfica (JavaFX) y una base de datos embebida (H2) mediante JPA/Hibernate. La importancia de este tipo de aplicaciones radica en que integran conceptos clave de la programación moderna: interfaz gráfica, persistencia de datos y arquitectura MVC (Modelo-Vista-Controlador).</p>
+</div>
+
+<div class="slide">
+<h2>Estructura y Componentes del Proyecto</h2>
+
+<h3>1. Estructura de Carpetas y Archivos</h3>
+
+<ul>
+<li><strong>src/main/java</strong>: Código fuente Java.
+  <ul>
+    <li><strong>com.parcial.parcial.App.java</strong>: Clase principal, inicia la aplicación.</li>
+    <li><strong>controllers/MainViewController.java</strong>: Controlador de la interfaz gráfica.</li>
+    <li><strong>model/Autor.java, Persona.java, AutorManager.java</strong>: Clases de dominio y lógica de negocio.</li>
+  </ul>
+</li>
+<li><strong>src/main/resources</strong>: Recursos como archivos FXML y configuración.
+  <ul>
+    <li><strong>views/main-view.fxml</strong>: Define la interfaz gráfica.</li>
+    <li><strong>META-INF/persistence.xml</strong>: Configuración de la base de datos y JPA.</li>
+  </ul>
+</li>
+<li><strong>pom.xml</strong>: Configuración de dependencias y plugins de Maven.</li>
+</ul>
+</div>
+
+<div class="slide">
+<h2>Funcionamiento Paso a Paso</h2>
+
+<h3>2. Inicio de la Aplicación</h3>
+
+<ul>
+<li><strong>App.java</strong>: Es la clase principal que extiende <code>Application</code> de JavaFX.
+  <ul>
+    <li>En el método <code>start</code>, carga el archivo FXML (<code>main-view.fxml</code>) y muestra la ventana principal con el título "Gestión de Autores".</li>
+    <li>El método <code>main</code> simplemente llama a <code>launch()</code>, que inicia el ciclo de vida de JavaFX.</li>
+  </ul>
+</li>
+</ul>
+
+<h3>3. Interfaz Gráfica (main-view.fxml)</h3>
+
+<ul>
+<li>Utiliza un diseño vertical (<code>VBox</code>) con campos de texto para ingresar DNI, nombre y pseudónimo del autor.</li>
+<li>Hay dos botones: "Agregar Autor" y "Eliminar Autor".</li>
+<li>Una lista (<code>ListView</code>) muestra los autores registrados.</li>
+<li>Cada campo de texto tiene un <code>fx:id</code> para ser accedido desde el controlador.</li>
+</ul>
+</div>
+
+<div class="slide">
+<h2>Controlador y Persistencia</h2>
+
+<h3>4. Controlador de la Vista (MainViewController.java)</h3>
+
+<ul>
+<li><strong>Inicialización</strong>: Al iniciar, crea una instancia de <code>AutorManager</code> y vincula la lista de autores al <code>ListView</code>.</li>
+<li><strong>Agregar Autor</strong>:
+  <ul>
+    <li>Lee los datos de los campos de texto.</li>
+    <li>Valida que nombre y pseudónimo no estén vacíos y que el DNI sea un número.</li>
+    <li>Si la validación es correcta, crea un nuevo objeto <code>Autor</code> y lo agrega a la base de datos y a la lista.</li>
+    <li>Limpia los campos de texto tras agregar.</li>
+    <li>Si hay errores, muestra alertas visuales.</li>
+  </ul>
+</li>
+<li><strong>Eliminar Autor</strong>:
+  <ul>
+    <li>Elimina el autor seleccionado en la lista, tanto de la base de datos como de la interfaz.</li>
+    <li>Si no hay selección, muestra una advertencia.</li>
+  </ul>
+</li>
+</ul>
+</div>
+
+<div class="slide">
+<h2>Lógica de Negocio y Persistencia</h2>
+
+<h4>a) Modelo de Datos</h4>
+
+<ul>
+<li><strong>Persona.java</strong>: Clase base con atributos <code>dni</code> y <code>nombre</code>. Es una clase mapeada como <code>@MappedSuperclass</code> para herencia en JPA.</li>
+<li><strong>Autor.java</strong>: Hereda de <code>Persona</code> y agrega el atributo <code>pseudonimo</code>. Está mapeada como entidad JPA (<code>@Entity</code>) y se almacena en la tabla <code>autores</code>.</li>
+</ul>
+
+<h4>b) Gestión de Autores (AutorManager.java)</h4>
+
+<ul>
+<li>Maneja la conexión con la base de datos usando JPA.</li>
+<li>Métodos principales:
+  <ul>
+    <li><code>cargarAutores()</code>: Carga todos los autores de la base de datos al iniciar.</li>
+    <li><code>addAutor(Autor autor)</code>: Persiste un nuevo autor en la base y lo agrega a la lista observable.</li>
+    <li><code>removeAutor(Autor autor)</code>: Elimina el autor de la base y de la lista.</li>
+    <li><code>getAutores()</code>: Devuelve la lista observable para que la interfaz se actualice automáticamente.</li>
+  </ul>
+</li>
+</ul>
+
+<h4>c) Configuración de Persistencia (persistence.xml)</h4>
+
+<ul>
+<li>Define el proveedor JPA (Hibernate), la clase de entidad (<code>Autor</code>), y los parámetros de conexión a la base de datos H2.</li>
+<li>Configura el modo de actualización automática de la base (<code>hibernate.hbm2ddl.auto=update</code>).</li>
+</ul>
+</div>
+
+<div class="slide">
+<h2>Detalle de la Clase AutorManager</h2>
+
+<p>La clase <code>AutorManager</code> es fundamental porque se encarga de la gestión de los autores y la comunicación con la base de datos.</p>
+
+<h3>a) Declaración de atributos</h3>
+
+<pre><code>private ObservableList&lt;Autor&gt; autores;
+private EntityManagerFactory emf;
+private EntityManager em;</code></pre>
+
+<ul>
+<li><strong>ObservableList&lt;Autor&gt; autores</strong>: Lista observable que almacena los autores y permite que la interfaz gráfica se actualice automáticamente cuando hay cambios.</li>
+<li><strong>EntityManagerFactory emf / EntityManager em</strong>: Objetos de JPA para gestionar la conexión y operaciones con la base de datos.</li>
+</ul>
+</div>
+
+<div class="slide">
+<h2>Constructor y Métodos Principales</h2>
+
+<h3>b) Constructor</h3>
+
+<pre><code>public AutorManager() {
+    emf = Persistence.createEntityManagerFactory("parcialPU");
+    em = emf.createEntityManager();
+    autores = FXCollections.observableArrayList();
+    cargarAutores();
+}</code></pre>
+
+<ul>
+<li>Crea la fábrica y el gestor de entidades usando la configuración de <code>persistence.xml</code>.</li>
+<li>Inicializa la lista observable.</li>
+<li>Llama a <code>cargarAutores()</code> para traer los autores existentes de la base de datos.</li>
+</ul>
+
+<h3>c) Método cargarAutores</h3>
+
+<pre><code>private void cargarAutores() {
+    autores.clear();
+    List&lt;Autor&gt; lista = em.createQuery("SELECT a FROM Autor a", Autor.class).getResultList();
+    autores.addAll(lista);
+}</code></pre>
+
+<ul>
+<li>Limpia la lista actual.</li>
+<li>Ejecuta una consulta JPA para obtener todos los autores de la base de datos.</li>
+<li>Agrega los autores a la lista observable.</li>
+</ul>
+</div>
+
+<div class="slide">
+<h2>Métodos de Gestión</h2>
+
+<h3>d) Método addAutor</h3>
+
+<pre><code>public void addAutor(Autor autor) {
+    if (autor != null) {
+        em.getTransaction().begin();
+        em.persist(autor);
+        em.getTransaction().commit();
+        autores.add(autor);
+    }
+}</code></pre>
+
+<ul>
+<li>Si el autor no es nulo, inicia una transacción, guarda el autor en la base de datos y lo agrega a la lista observable.</li>
+</ul>
+
+<h3>e) Método removeAutor</h3>
+
+<pre><code>public void removeAutor(Autor autor) {
+    if (autor != null) {
+        em.getTransaction().begin();
+        Autor toRemove = em.find(Autor.class, autor.getDni());
+        if (toRemove != null) {
+            em.remove(toRemove);
+        }
+        em.getTransaction().commit();
+        autores.remove(autor);
+    }
+}</code></pre>
+
+<ul>
+<li>Busca el autor por DNI, lo elimina de la base de datos y de la lista observable.</li>
+</ul>
+</div>
+
+<div class="slide">
+<h2>main-view.fxml: Imports y fx:id</h2>
+
+<h3>a) Imports</h3>
+
+<pre><code>&lt;?import javafx.geometry.*?&gt;
+&lt;?import javafx.scene.control.*?&gt;
+&lt;?import javafx.scene.layout.*?&gt;
+&lt;?import javafx.scene.text.*?&gt;</code></pre>
+
+<ul>
+<li>Estos imports permiten usar los componentes de JavaFX en el archivo FXML, como botones, campos de texto, etiquetas, contenedores, etc.</li>
+</ul>
+
+<h3>b) Uso de fx:id</h3>
+
+<pre><code>&lt;TextField fx:id="dniTextField" promptText="DNI del autor" /&gt;
+&lt;TextField fx:id="nombreTextField" promptText="Nombre del autor" /&gt;
+&lt;TextField fx:id="pseudonimoTextField" promptText="Pseudónimo del autor" /&gt;
+&lt;ListView fx:id="autoresListView" VBox.vgrow="ALWAYS" /&gt;</code></pre>
+
+<ul>
+<li>El atributo <code>fx:id</code> asigna un identificador único a cada componente.</li>
+<li>Estos IDs permiten que el controlador (<code>MainViewController</code>) acceda y manipule estos elementos desde el código Java.</li>
+</ul>
+</div>
+
+<div class="slide">
+<h2>MainViewController: Variables y Initialize</h2>
+
+<h3>a) Declaración de variables y vinculación con la vista</h3>
+
+<pre><code>@FXML private TextField dniTextField;
+@FXML private TextField nombreTextField;
+@FXML private TextField pseudonimoTextField;
+@FXML private ListView&lt;Autor&gt; autoresListView;
+private AutorManager autorManager;</code></pre>
+
+<ul>
+<li>Las variables con <code>@FXML</code> se vinculan automáticamente con los componentes del FXML que tienen el mismo <code>fx:id</code>.</li>
+<li><code>autorManager</code> es la instancia que gestiona la lógica de autores.</li>
+</ul>
+
+<h3>b) Método initialize</h3>
+
+<ul>
+<li>Se crea el <code>AutorManager</code> y se vincula la lista observable de autores al <code>ListView</code>.</li>
+<li>Se define cómo se mostrará cada autor en la lista, personalizando el texto que aparece.</li>
+</ul>
+</div>
+
+<div class="slide">
+<h2>Métodos de Acción del Controlador</h2>
+
+<h3>c) Método eliminarAutor</h3>
+
+<ul>
+<li>Obtiene el autor seleccionado en la lista.</li>
+<li>Si hay uno seleccionado, lo elimina usando el <code>AutorManager</code>.</li>
+<li>Si no, muestra una advertencia para que el usuario seleccione un autor.</li>
+</ul>
+
+<h3>d) Método agregarAutor</h3>
+
+<ul>
+<li>Lee los datos de los campos de texto.</li>
+<li>Valida que el nombre y el pseudónimo no estén vacíos.</li>
+<li>Si la validación es correcta, crea un nuevo <code>Autor</code> y lo agrega usando el <code>AutorManager</code>.</li>
+<li>Limpia los campos de texto para permitir nuevas entradas.</li>
+<li>Si el DNI no es un número, muestra un mensaje de error en la consola.</li>
+</ul>
+</div>
+
+<div class="slide">
+<h2>Explicación de Resultados</h2>
+
+<ul>
+<li><strong>Al agregar un autor</strong>: Si los datos son válidos, el autor aparece en la lista y se guarda en la base de datos. Si hay errores (campos vacíos o DNI inválido), se muestra un mensaje de error.</li>
+<li><strong>Al eliminar un autor</strong>: El autor seleccionado desaparece de la lista y se elimina de la base de datos.</li>
+<li><strong>Persistencia</strong>: Los datos se mantienen aunque se cierre y vuelva a abrir la aplicación, gracias al uso de la base de datos H2 y JPA.</li>
+<li><strong>Interfaz reactiva</strong>: La lista de autores se actualiza automáticamente al agregar o eliminar, sin necesidad de recargar la ventana.</li>
+</ul>
+</div>
+
+<div class="slide">
+<div class="conclusion">
+<h2>Conclusión y Recomendaciones</h2>
+
+<h3>Puntos clave:</h3>
+<ul>
+<li>El proyecto integra JavaFX para la interfaz, JPA/Hibernate para la persistencia y una arquitectura clara basada en MVC.</li>
+<li>La validación de datos y el manejo de errores mejoran la experiencia de usuario.</li>
+<li>El uso de listas observables (<code>ObservableList</code>) permite que la interfaz se mantenga sincronizada con los datos.</li>
+<li>La clase <code>AutorManager</code> centraliza la lógica de acceso a datos y mantiene la lista sincronizada con la interfaz.</li>
+<li>El archivo FXML define la estructura visual y los IDs permiten la comunicación con el controlador.</li>
+<li>El controlador gestiona la interacción usuario-aplicación, validando datos y mostrando mensajes claros.</li>
+</ul>
+
+<h3>Recomendaciones:</h3>
+<ul>
+<li>Siempre validar los datos antes de guardarlos.</li>
+<li>Separar la lógica de negocio del código de la interfaz para facilitar el mantenimiento.</li>
+<li>Probar la aplicación agregando y eliminando autores para verificar el correcto funcionamiento y la persistencia de los datos.</li>
+<li>Para la defensa, es clave entender cómo cada parte se conecta: la vista (FXML), el controlador (MainViewController) y la lógica de negocio (AutorManager).</li>
+</ul>
+</div>
+</div>
+
+</body>
+</html>
